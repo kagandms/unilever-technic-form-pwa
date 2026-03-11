@@ -1169,7 +1169,7 @@
             }
         }
 
-        async function createPDF() {
+        function generatePDFBlob() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
@@ -1342,7 +1342,7 @@
         function handleSavePDF() {
             showToast('PDF oluşturuluyor...');
             try {
-                const { blob, fileName } = createPDF();
+                const { blob, fileName } = generatePDFBlob();
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a'); a.href = url; a.download = fileName; a.style.display = 'none';
                 document.body.appendChild(a); a.click();
