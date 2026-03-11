@@ -1186,8 +1186,6 @@
             // HEADER
             doc.setFillColor(...colDark);
             doc.rect(0, 0, pw, 45, 'F');
-            doc.setFillColor(255, 255, 255);
-            doc.roundedRect(15, 5, 50, 35, 4, 4, 'F');
             const logoData = getImageDataUrl('.logo-image', 200);
             if (logoData) {
                 try {
@@ -1299,7 +1297,7 @@
             if (y > ph - 70) { doc.addPage(); y = 20; }
             const bottomY = Math.max(y, ph - 80);
             doc.setTextColor(...colDark); doc.setFontSize(10);
-            doc.text('Teknik Servis Görevlisi:', 40, bottomY + 5, { align: 'center' });
+            doc.text('Servis Teknisyeni', 40, bottomY + 5, { align: 'center' });
             doc.setFontSize(9);
             doc.text('Ahmet Durmuş', 40, bottomY + 12, { align: 'center' });
 

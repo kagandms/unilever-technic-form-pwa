@@ -291,8 +291,6 @@ function generatePDFBlob() {
     doc.rect(0, 0, pw, 45, 'F');
 
     // Logo
-    doc.setFillColor(255, 255, 255);
-    doc.roundedRect(15, 5, 50, 35, 4, 4, 'F');
     const logoData = getImageDataUrl('.logo-image', 200);
     if (logoData) {
         try {
@@ -506,7 +504,7 @@ function generatePDFBlob() {
     doc.setTextColor(...colDark);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Teknik Servis Gorevlisi:', 40, bottomY + 5, { align: 'center' });
+    doc.text('Servis Teknisyeni', 40, bottomY + 5, { align: 'center' });
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.text('Ahmet Durmus', 40, bottomY + 12, { align: 'center' });
