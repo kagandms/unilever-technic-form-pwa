@@ -1177,8 +1177,8 @@
             const time = new Date().toLocaleTimeString('tr-TR');
             const pw = doc.internal.pageSize.width;
             const ph = doc.internal.pageSize.height;
-            // FIX: PDF Colors match BG (#0a0a14 = 10,10,20)
-            const colDark = [10, 10, 20];
+            // FIX: PDF Colors match BG to Unilever Blue
+            const colDark = [0, 32, 96];
             const colPrimary = [76, 201, 240];
             const colAccent = [67, 97, 238];
             let y = 0;
@@ -1201,9 +1201,9 @@
             }
             doc.setTextColor(255, 255, 255); doc.setFontSize(24); if (window.pdfFont) doc.setFont('Roboto', 'normal'); // Bold not available in subset
             doc.text('SERVİS FORMU', pw - 15, 22, { align: 'right' });
-            doc.setTextColor(...colPrimary); doc.setFontSize(10);
+            doc.setTextColor(255, 255, 255); doc.setFontSize(10);
             doc.text(`Tarih: ${date}   Saat: ${time}`, pw - 15, 32, { align: 'right' });
-            doc.setDrawColor(...colPrimary); doc.setLineWidth(0.5); doc.line(15, 45, pw - 15, 45);
+            doc.setDrawColor(255, 255, 255); doc.setLineWidth(0.5); doc.line(15, 45, pw - 15, 45);
 
             y = 60;
 

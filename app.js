@@ -280,7 +280,7 @@ function generatePDFBlob() {
     const pw = doc.internal.pageSize.width;
     const ph = doc.internal.pageSize.height;
 
-    const colDark = [10, 10, 20];
+    const colDark = [0, 32, 96];
     const colPrimary = [76, 201, 240];
     const colAccent = [67, 97, 238];
 
@@ -311,12 +311,12 @@ function generatePDFBlob() {
     doc.setFont('helvetica', 'bold');
     doc.text('SERVIS FORMU', pw - 15, 22, { align: 'right' });
 
-    doc.setTextColor(...colPrimary);
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.text(`Tarih: ${date}   Saat: ${time}`, pw - 15, 32, { align: 'right' });
 
-    doc.setDrawColor(...colPrimary);
+    doc.setDrawColor(255, 255, 255);
     doc.setLineWidth(0.5);
     doc.line(15, 45, pw - 15, 45);
 
