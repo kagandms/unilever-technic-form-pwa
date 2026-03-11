@@ -493,25 +493,14 @@ function generatePDFBlob() {
     if (y > ph - 70) { doc.addPage(); y = 20; }
     const bottomY = Math.max(y, ph - 80);
 
-    // Left: DozaTech + Stamp
+    // Left: Teknik Servis
     doc.setTextColor(...colDark);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('DozaTech Teknik Servis', 40, bottomY + 5, { align: 'center' });
-
-    // Stamp
-    const stampData = getImageDataUrl('#kaseImage');
-    if (stampData) {
-        try {
-            const sProps = doc.getImageProperties(stampData);
-            const sRatio = sProps.height / sProps.width;
-            const sW = 40;
-            const sH = sW * sRatio;
-            doc.addImage(stampData, 'JPEG', 20, bottomY + 8, sW, sH);
-        } catch (e) { }
-    } else {
-        doc.text('Imza / Kase', 40, bottomY + 30, { align: 'center' });
-    }
+    doc.text('Teknik Servis:', 40, bottomY + 5, { align: 'center' });
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Ahmet Durmus', 40, bottomY + 12, { align: 'center' });
 
     // Right: Customer
     doc.text('Musteri', pw - 45, bottomY + 5, { align: 'center' });
@@ -532,7 +521,7 @@ function generatePDFBlob() {
     const safeName = customer ? convertTurkish(customer.name).replace(/\s+/g, '_') : 'Musteri';
     const fn = `servisformu_${safeName}_${date.replace(/\./g, '-')}.pdf`;
 
-    doc.text('DozaTech - Endustriyel Mutfak Cozumleri', pw / 2, ph - 9, { align: 'center' });
+    doc.text('Unilever', pw / 2, ph - 9, { align: 'center' });
     doc.text('Bu form dijital olarak olusturulmustur.', pw / 2, ph - 5, { align: 'center' });
 
     return { blob: doc.output('blob'), fileName: fn };

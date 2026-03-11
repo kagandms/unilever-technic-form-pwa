@@ -576,7 +576,7 @@
     <div id="loginScreen" class="login-screen">
         <div class="login-box">
             <div class="login-logo">
-                <img src="logo.png" alt="DozaTech">
+                <img src="unilever_logo.webp" alt="Unilever">
             </div>
             <h2>Servis Formu Giriş</h2>
             <input type="password" id="loginPassword" placeholder="Şifreniz" autocomplete="current-password">
@@ -592,7 +592,7 @@
     <div class="container" id="appContainer" style="display: none;">
         <header class="logo-section">
             <div class="logo-container">
-                <img src="logo.png" alt="DozaTech" class="logo-image">
+                <img src="unilever_logo.webp" alt="Unilever" class="logo-image">
                 <img src="kase.jpg" id="kaseImage" style="display: none;" alt="Kase">
             </div>
         </header>
@@ -644,7 +644,7 @@
         </div>
 
         <footer>
-            <p>© 2024 DozaTech - Endüstriyel Mutfak Çözümleri</p>
+            <p>© 2024 Unilever</p>
         </footer>
     </div>
 
@@ -1286,18 +1286,9 @@
             if (y > ph - 70) { doc.addPage(); y = 20; }
             const bottomY = Math.max(y, ph - 80);
             doc.setTextColor(...colDark); doc.setFontSize(10);
-            doc.text('DozaTech Teknik Servis', 40, bottomY + 5, { align: 'center' });
-
-            // Stamp
-            const stampData = getImageDataUrl('#kaseImage');
-            if (stampData) {
-                try {
-                    const sProps = doc.getImageProperties(stampData);
-                    const sRatio = sProps.height / sProps.width;
-                    const sW = 40; const sH = sW * sRatio;
-                    doc.addImage(stampData, 'JPEG', 20, bottomY + 8, sW, sH);
-                } catch (e) { }
-            } else { doc.text('İmza / Kaşe', 40, bottomY + 30, { align: 'center' }); }
+            doc.text('Teknik Servis:', 40, bottomY + 5, { align: 'center' });
+            doc.setFontSize(9);
+            doc.text('Ahmet Durmus', 40, bottomY + 12, { align: 'center' });
 
             doc.text('Müşteri', pw - 45, bottomY + 5, { align: 'center' });
 
@@ -1315,7 +1306,7 @@
             doc.setTextColor(150, 150, 150); doc.setFontSize(8);
             const safeName = customer ? customer.name.replace(/\s+/g, '_') : 'Musteri';
             const fn = `servisformu_${safeName}_${date.replace(/\./g, '-')}.pdf`;
-            doc.text('DozaTech - Endüstriyel Mutfak Çözümleri', pw / 2, ph - 9, { align: 'center' });
+            doc.text('Unilever', pw / 2, ph - 9, { align: 'center' });
             doc.text('Bu form dijital olarak oluşturulmuştur.', pw / 2, ph - 5, { align: 'center' });
 
             return { blob: doc.output('blob'), fileName: fn };
