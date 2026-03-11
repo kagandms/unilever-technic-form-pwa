@@ -280,7 +280,7 @@ function generatePDFBlob() {
     const pw = doc.internal.pageSize.width;
     const ph = doc.internal.pageSize.height;
 
-    const colDark = [0, 32, 96];
+    const colDark = [14, 61, 140];
     const colPrimary = [76, 201, 240];
     const colAccent = [67, 97, 238];
 
