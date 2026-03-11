@@ -1,7 +1,7 @@
 {
-    "name": "Dozatech Servis Formu",
-    "short_name": "Dozatech Servis",
-    "description": "Bulaşık Makinesi Servis Formu",
+    "name": "Unilever Pro",
+    "short_name": "Unilever Pro",
+    "description": "Unilever Servis Formu",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#1a1a2e",
