@@ -245,18 +245,25 @@ function convertTurkish(t) {
         .replace(/ç/g, 'c').replace(/Ç/g, 'C');
 }
 
-function getImageDataUrl(selector) {
+function getImageDataUrl(selector, maxDim) {
     const img = document.querySelector(selector);
     if (!img) return null;
     try {
         const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
+        let w = img.naturalWidth;
+        let h = img.naturalHeight;
+        const limit = maxDim || 200;
+        if (w > limit || h > limit) {
+            if (w >= h) { h = Math.round(h * (limit / w)); w = limit; }
+            else { w = Math.round(w * (limit / h)); h = limit; }
+        }
+        canvas.width = w;
+        canvas.height = h;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        return canvas.toDataURL('image/png');
+        ctx.drawImage(img, 0, 0, w, h);
+        return canvas.toDataURL('image/jpeg', 0.85);
     } catch (e) {
-        return null; // Ignore errors
+        return null;
     }
 }
 
@@ -285,16 +292,18 @@ function generatePDFBlob() {
 
     // Logo
     doc.setFillColor(255, 255, 255);
-    doc.roundedRect(15, 10, 50, 25, 4, 4, 'F');
-    const logoData = getImageDataUrl('.logo-image');
+    doc.roundedRect(15, 5, 50, 35, 4, 4, 'F');
+    const logoData = getImageDataUrl('.logo-image', 200);
     if (logoData) {
         try {
             const imgProps = doc.getImageProperties(logoData);
             const ratio = imgProps.height / imgProps.width;
-            const logoW = 40;
-            const logoH = logoW * ratio;
-            const logoY = 10 + (25 - logoH) / 2;
-            doc.addImage(logoData, 'PNG', 20, logoY, logoW, logoH);
+            const boxW = 46, boxH = 31;
+            let logoW = boxW, logoH = logoW * ratio;
+            if (logoH > boxH) { logoH = boxH; logoW = logoH / ratio; }
+            const logoX = 15 + (50 - logoW) / 2;
+            const logoY = 5 + (35 - logoH) / 2;
+            doc.addImage(logoData, 'JPEG', logoX, logoY, logoW, logoH);
         } catch (e) { }
     }
 
@@ -497,7 +506,7 @@ function generatePDFBlob() {
     doc.setTextColor(...colDark);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Teknik Servis:', 40, bottomY + 5, { align: 'center' });
+    doc.text('Teknik Servis Gorevlisi:', 40, bottomY + 5, { align: 'center' });
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.text('Ahmet Durmus', 40, bottomY + 12, { align: 'center' });
