@@ -341,9 +341,9 @@ function generatePDFBlob() {
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         doc.text(customer.phone, 34, y + 18);
-        y += 35;
+        y += 32;
     } else {
-        y += 10;
+        y += 8;
     }
 
     // === SECTION: DISHWASHERS ===
@@ -354,10 +354,10 @@ function generatePDFBlob() {
         doc.text(`BULASIK MAKINELERI (${machineCount})`, 15, y);
         doc.setDrawColor(...colPrimary);
         doc.line(15, y + 3, 100, y + 3);
-        y += 15;
+        y += 10;
 
         for (let i = 1; i <= machineCount; i++) {
-            if (y > 230) { doc.addPage(); y = 20; }
+            if (y > 245) { doc.addPage(); y = 20; }
 
             doc.setFillColor(...colPrimary);
             doc.roundedRect(15, y, pw - 30, 8, 2, 2, 'F');
@@ -405,24 +405,24 @@ function generatePDFBlob() {
                 }
             });
             if (checklistItems.length % 2 !== 0) y += 6;
-            y += 8;
+            y += 6;
         }
-        y += 10;
+        y += 6;
     }
 
     // === SECTION: DOSAGE PUMPS ===
     if (pumpCount > 0) {
-        if (y > 230) { doc.addPage(); y = 20; }
+        if (y > 245) { doc.addPage(); y = 20; }
         doc.setTextColor(...colDark);
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.text(`DOZAJ POMPALARI (${pumpCount})`, 15, y);
         doc.setDrawColor(...colPrimary);
         doc.line(15, y + 3, 100, y + 3);
-        y += 15;
+        y += 10;
 
         for (let i = 1; i <= pumpCount; i++) {
-            if (y > 230) { doc.addPage(); y = 20; }
+            if (y > 245) { doc.addPage(); y = 20; }
 
             doc.setFillColor(...colAccent);
             doc.roundedRect(15, y, pw - 30, 8, 2, 2, 'F');
@@ -469,13 +469,13 @@ function generatePDFBlob() {
                 }
             });
             if (pumpChecklistItems.length % 2 !== 0) y += 6;
-            y += 8;
+            y += 6;
         }
     }
 
     // === NOTES ===
     if (generalNotes.value.trim()) {
-        if (y > 220) { doc.addPage(); y = 20; }
+        if (y > 240) { doc.addPage(); y = 20; }
         const txt = convertTurkish(generalNotes.value);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(10);
@@ -491,14 +491,14 @@ function generatePDFBlob() {
         doc.rect(15, y, pw - 30, boxH, 'FD');
         doc.setTextColor(50, 50, 50);
         doc.text(lines, 20, y + 6);
-        y += boxH + 15;
+        y += boxH + 8;
     } else {
-        y += 10;
+        y += 6;
     }
 
     // === SIGNATURES ===
-    if (y > ph - 70) { doc.addPage(); y = 20; }
-    const bottomY = Math.max(y, ph - 80);
+    if (y > ph - 45) { doc.addPage(); y = 20; }
+    const bottomY = Math.max(y, ph - 55);
 
     // Left: Teknik Servis
     doc.setTextColor(...colDark);

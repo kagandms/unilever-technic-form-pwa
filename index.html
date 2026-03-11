@@ -1212,9 +1212,10 @@
                 doc.setTextColor(...colDark); doc.setFontSize(14);
                 doc.text(`BULAŞIK MAKİNELERİ (${machineCount})`, 15, y);
                 doc.setDrawColor(...colPrimary); doc.line(15, y + 3, 100, y + 3);
-                y += 15;
+                y += 10;
+
                 for (let i = 1; i <= machineCount; i++) {
-                    if (y > 230) { doc.addPage(); y = 20; }
+                    if (y > 245) { doc.addPage(); y = 20; }
                     doc.setFillColor(...colPrimary); doc.roundedRect(15, y, pw - 30, 8, 2, 2, 'F');
                     doc.setTextColor(...colDark); doc.setFontSize(10);
                     doc.text(`Bulaşık Makinesi ${i}`, 20, y + 5.5);
@@ -1239,20 +1240,21 @@
                         // FIX: Increased row spacing to avoid "dip dibe" look
                         if (index % 2 === 0) xPos = pw / 2 + 5; else { xPos = 20; y += 8; }
                     });
-                    if (checklistItems.length % 2 !== 0) y += 8; y += 10;
+                    if (checklistItems.length % 2 !== 0) y += 6;
+                    y += 6;
                 }
-                y += 10;
+                y += 6;
             }
 
             // DOSAGE PUMP
             if (pumpCount > 0) {
-                if (y > 230) { doc.addPage(); y = 20; }
-                doc.setTextColor(...colDark); doc.setFontSize(14);
+                if (y > 245) { doc.addPage(); y = 20; }
+                doc.setTextColor(...colDark); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
                 doc.text(`DOZAJ POMPALARI (${pumpCount})`, 15, y);
                 doc.setDrawColor(...colPrimary); doc.line(15, y + 3, 100, y + 3);
-                y += 15;
+                y += 10;
                 for (let i = 1; i <= pumpCount; i++) {
-                    if (y > 230) { doc.addPage(); y = 20; }
+                    if (y > 245) { doc.addPage(); y = 20; }
                     doc.setFillColor(...colAccent); doc.roundedRect(15, y, pw - 30, 8, 2, 2, 'F');
                     doc.setTextColor(255, 255, 255); doc.setFontSize(10);
                     doc.text(`Dozaj Pompası ${i}`, 20, y + 5.5);
@@ -1276,13 +1278,14 @@
                         // FIX: Increased row spacing
                         if (index % 2 === 0) xPos = pw / 2 + 5; else { xPos = 20; y += 8; }
                     });
-                    if (pumpChecklistItems.length % 2 !== 0) y += 8; y += 10;
+                    if (pumpChecklistItems.length % 2 !== 0) y += 6;
+                    y += 6;
                 }
             }
 
             // NOTES
             if (generalNotes.value.trim()) {
-                if (y > 220) { doc.addPage(); y = 20; }
+                if (y > 240) { doc.addPage(); y = 20; }
                 const txt = generalNotes.value;
                 doc.setFontSize(10); doc.setTextColor(...colDark); doc.text('NOTLAR:', 15, y); y += 6;
                 doc.setFontSize(9);
@@ -1290,12 +1293,15 @@
                 doc.setFillColor(250, 250, 250); doc.setDrawColor(230, 230, 230);
                 const boxH = Math.max(15, lines.length * 5 + 10);
                 doc.rect(15, y, pw - 30, boxH, 'FD');
-                doc.setTextColor(50, 50, 50); doc.text(lines, 20, y + 6); y += boxH + 15;
-            } else { y += 10; }
+                doc.setTextColor(50, 50, 50); doc.text(lines, 20, y + 6);
+                y += boxH + 8;
+            } else {
+                y += 6;
+            }
 
             // SIGNATURES
-            if (y > ph - 70) { doc.addPage(); y = 20; }
-            const bottomY = Math.max(y, ph - 80);
+            if (y > ph - 45) { doc.addPage(); y = 20; }
+            const bottomY = Math.max(y, ph - 55);
             doc.setTextColor(...colDark); doc.setFontSize(10);
             doc.text('Servis Teknisyeni', 40, bottomY + 5, { align: 'center' });
             doc.setFontSize(9);
