@@ -1153,7 +1153,7 @@
                 canvas.height = h;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, w, h);
-                return canvas.toDataURL('image/jpeg', 0.85);
+                return canvas.toDataURL('image/png');
             } catch (e) {
                 return null;
             }
@@ -1196,7 +1196,7 @@
                     if (logoH > boxH) { logoH = boxH; logoW = logoH / ratio; }
                     const logoX = 15 + (50 - logoW) / 2;
                     const logoY = 5 + (35 - logoH) / 2;
-                    doc.addImage(logoData, 'JPEG', logoX, logoY, logoW, logoH);
+                    doc.addImage(logoData, 'PNG', logoX, logoY, logoW, logoH);
                 } catch (e) { }
             }
             doc.setTextColor(255, 255, 255); doc.setFontSize(24); if (window.pdfFont) doc.setFont('Roboto', 'normal'); // Bold not available in subset

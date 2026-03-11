@@ -261,7 +261,7 @@ function getImageDataUrl(selector, maxDim) {
         canvas.height = h;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, w, h);
-        return canvas.toDataURL('image/jpeg', 0.85);
+        return canvas.toDataURL('image/png');
     } catch (e) {
         return null;
     }
@@ -301,7 +301,7 @@ function generatePDFBlob() {
             if (logoH > boxH) { logoH = boxH; logoW = logoH / ratio; }
             const logoX = 15 + (50 - logoW) / 2;
             const logoY = 5 + (35 - logoH) / 2;
-            doc.addImage(logoData, 'JPEG', logoX, logoY, logoW, logoH);
+            doc.addImage(logoData, 'PNG', logoX, logoY, logoW, logoH);
         } catch (e) { }
     }
 
