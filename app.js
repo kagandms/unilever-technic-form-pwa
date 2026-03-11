@@ -271,8 +271,16 @@ function generatePDFBlob() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    const setPdfFont = (weight) => {
+        if (window.pdfFont) {
+            doc.setFont('Roboto', 'normal');
+        } else {
+            doc.setFont('helvetica', weight);
+        }
+    };
+
     // Using Standard Helvetica
-    doc.setFont('helvetica');
+    setPdfFont('normal');
 
     const customer = customers.find(c => c.id === selectedCustomerId);
     const date = new Date().toLocaleDateString('tr-TR');
@@ -308,12 +316,12 @@ function generatePDFBlob() {
     // Title
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(24);
-    doc.setFont('helvetica', 'bold');
+    setPdfFont('bold');
     doc.text('SERVIS FORMU', pw - 15, 22, { align: 'right' });
 
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
+    setPdfFont('normal');
     doc.text(`Tarih: ${date}   Saat: ${time}`, pw - 15, 32, { align: 'right' });
 
     doc.setDrawColor(255, 255, 255);
@@ -335,11 +343,11 @@ function generatePDFBlob() {
         doc.text('M', 24, y + 13.5, { align: 'center' });
         doc.setTextColor(...colDark);
         doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text(convertTurkish(customer.name), 34, y + 10);
+        setPdfFont('bold');
+        doc.text(customer.name, 34, y + 10);
         doc.setTextColor(100, 100, 100);
         doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
+        setPdfFont('normal');
         doc.text(customer.phone, 34, y + 18);
         y += 32;
     } else {
@@ -350,7 +358,7 @@ function generatePDFBlob() {
     if (machineCount > 0) {
         doc.setTextColor(...colDark);
         doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
+        setPdfFont('bold');
         doc.text(`BULASIK MAKINELERI (${machineCount})`, 15, y);
         doc.setDrawColor(...colPrimary);
         doc.line(15, y + 3, 100, y + 3);
@@ -363,14 +371,14 @@ function generatePDFBlob() {
             doc.roundedRect(15, y, pw - 30, 8, 2, 2, 'F');
             doc.setTextColor(...colDark);
             doc.setFontSize(10);
-            doc.setFont('helvetica', 'bold');
+            setPdfFont('bold');
             doc.text(`Bulasik Makinesi ${i}`, 20, y + 5.5);
 
             y += 12;
 
             const state = machineStates[i] || {};
             doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
+            setPdfFont('normal');
 
             let xPos = 20;
 
@@ -395,7 +403,7 @@ function generatePDFBlob() {
 
                 doc.setTextColor(80, 80, 80);
                 doc.setFontSize(9);
-                doc.text(convertTurkish(item.label), xPos + 7, y);
+                doc.text(item.label, xPos + 7, y);
 
                 if (index % 2 === 0) {
                     xPos = pw / 2 + 5;
@@ -415,7 +423,7 @@ function generatePDFBlob() {
         if (y > 245) { doc.addPage(); y = 20; }
         doc.setTextColor(...colDark);
         doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
+        setPdfFont('bold');
         doc.text(`DOZAJ POMPALARI (${pumpCount})`, 15, y);
         doc.setDrawColor(...colPrimary);
         doc.line(15, y + 3, 100, y + 3);
@@ -428,14 +436,14 @@ function generatePDFBlob() {
             doc.roundedRect(15, y, pw - 30, 8, 2, 2, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(10);
-            doc.setFont('helvetica', 'bold');
+            setPdfFont('bold');
             doc.text(`Dozaj Pompasi ${i}`, 20, y + 5.5);
 
             y += 12;
 
             const state = pumpStates[i] || {};
             doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
+            setPdfFont('normal');
 
             let xPos = 20;
 
@@ -459,7 +467,7 @@ function generatePDFBlob() {
 
                 doc.setTextColor(80, 80, 80);
                 doc.setFontSize(9);
-                doc.text(convertTurkish(item.label), xPos + 7, y);
+                doc.text(item.label, xPos + 7, y);
 
                 if (index % 2 === 0) {
                     xPos = pw / 2 + 5;
@@ -476,13 +484,13 @@ function generatePDFBlob() {
     // === NOTES ===
     if (generalNotes.value.trim()) {
         if (y > 240) { doc.addPage(); y = 20; }
-        const txt = convertTurkish(generalNotes.value);
-        doc.setFont('helvetica', 'bold');
+        const txt = generalNotes.value;
+        setPdfFont('bold');
         doc.setFontSize(10);
         doc.setTextColor(...colDark);
         doc.text('NOTLAR:', 15, y);
         y += 6;
-        doc.setFont('helvetica', 'normal');
+        setPdfFont('normal');
         doc.setFontSize(9);
         const lines = doc.splitTextToSize(txt, pw - 30);
         doc.setFillColor(250, 250, 250);
@@ -503,18 +511,18 @@ function generatePDFBlob() {
     // Left: Teknik Servis
     doc.setTextColor(...colDark);
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
+    setPdfFont('bold');
     doc.text('Servis Teknisyeni', 40, bottomY + 5, { align: 'center' });
     doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
+    setPdfFont('normal');
     doc.text('Ahmet Durmus', 40, bottomY + 12, { align: 'center' });
 
     // Right: Customer
     doc.text('Musteri', pw - 45, bottomY + 5, { align: 'center' });
     if (customer) {
-        doc.setFont('helvetica', 'normal');
+        setPdfFont('normal');
         doc.setFontSize(9);
-        doc.text(convertTurkish(customer.name), pw - 45, bottomY + 30, { align: 'center' });
+        doc.text(customer.name, pw - 45, bottomY + 30, { align: 'center' });
     }
     doc.setDrawColor(150, 150, 150);
     doc.line(pw - 70, bottomY + 35, pw - 20, bottomY + 35);
@@ -525,7 +533,7 @@ function generatePDFBlob() {
     doc.setTextColor(150, 150, 150);
     doc.setFontSize(8);
     // Filename: servisformu_...
-    const safeName = customer ? convertTurkish(customer.name).replace(/\s+/g, '_') : 'Musteri';
+    const safeName = customer ? customer.name.replace(/\s+/g, '_') : 'Musteri';
     const fn = `servisformu_${safeName}_${date.replace(/\./g, '-')}.pdf`;
 
     doc.text('Unilever', pw / 2, ph - 9, { align: 'center' });
