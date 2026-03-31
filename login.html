@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Unilever Pro Giris</title>
+    <style>
+        :root {
+            --primary-color: #4cc9f0;
+            --accent-color: #0077b6;
+            --bg-dark: #0a0a14;
+            --bg-card: #12121f;
+            --bg-input: #0d0d18;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --danger-color: #ef476f;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1629 100%);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: min(360px, 100%);
+            background: var(--bg-card);
+            padding: 32px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 60px rgba(76, 201, 240, 0.1);
+        }
+
+        .login-logo {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+
+        .login-logo img {
+            width: 100%;
+            display: block;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0 18px;
+            color: var(--text-secondary);
+        }
+
+        .remember-row input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--border-radius);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: #09101a;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .help-text {
+            margin-top: 12px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .error-text {
+            min-height: 20px;
+            margin-top: 14px;
+            color: var(--danger-color);
+            text-align: center;
+            font-size: 0.92rem;
+        }
+    </style>
+</head>
+<body>
+    <form id="loginForm" class="login-box">
+        <div class="login-logo">
+            <img src="unilever_logo.webp" alt="Unilever">
+        </div>
+        <h1>Servis Formu Giris</h1>
+
+        <div class="field">
+            <label for="username">Kullanici Adi</label>
+            <input id="username" name="username" type="text" autocomplete="username" required>
+        </div>
+
+        <div class="field">
+            <label for="password">Sifre</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+
+        <label class="remember-row" for="rememberMe">
+            <input id="rememberMe" name="rememberMe" type="checkbox" checked>
+            <span>Beni hatirla</span>
+        </label>
+
+        <button type="submit">Giris Yap</button>
+        <p class="help-text">PWA modunda tekrar sifre sormamasi icin bu secenegi acik birak.</p>
+        <p id="loginError" class="error-text"></p>
+    </form>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const rememberMeInput = document.getElementById('rememberMe');
+
+        function normalizeReturnTo(returnTo) {
+            if (!returnTo || !returnTo.startsWith('/') || returnTo.startsWith('//')) {
+                return '/';
+            }
+
+            return returnTo;
+        }
+
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            loginError.textContent = '';
+
+            const returnTo = normalizeReturnTo(
+                new URLSearchParams(window.location.search).get('returnTo'),
+            );
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: usernameInput.value.trim(),
+                        password: passwordInput.value,
+                        rememberMe: rememberMeInput.checked,
+                        returnTo,
+                    }),
+                });
+
+                const responseBody = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    loginError.textContent = responseBody.message || 'Giris basarisiz.';
+                    passwordInput.value = '';
+                    return;
+                }
+
+                window.location.replace(normalizeReturnTo(responseBody.returnTo));
+            } catch {
+                loginError.textContent = 'Baglanti hatasi. Tekrar deneyin.';
+            }
+        }
+
+        loginForm.addEventListener('submit', handleLoginSubmit);
+    </script>
+</body>
+</html>

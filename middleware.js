@@ -1,72 +1,55 @@
-const UNAUTHORIZED_HEADERS = {
-  'WWW-Authenticate': 'Basic realm="Unilever Service Form", charset="UTF-8"',
-  'Cache-Control': 'no-store',
-};
+import {
+  LOGIN_PATH,
+  getExpectedCredentials,
+  hasValidSession,
+  isLocalRequest,
+  normalizeReturnTo,
+} from './auth.js';
+
+const PUBLIC_PATHS = new Set([
+  LOGIN_PATH,
+  '/api/login',
+  '/api/logout',
+  '/manifest.json',
+  '/sw.js',
+  '/unilever_logo.webp',
+  '/kase.jpg',
+  '/logo.png',
+]);
 
 /**
- * Keep local development unblocked, but fail closed on Vercel if auth env vars
- * are missing so deployments are never accidentally exposed.
- *
- * @param {string} requestUrl
+ * @param {Request} request
  * @returns {boolean}
  */
-function isLocalRequest(requestUrl) {
-  const { hostname } = new URL(requestUrl);
-  return hostname === 'localhost' || hostname === '127.0.0.1';
+function isHtmlNavigation(request) {
+  if (request.method !== 'GET') {
+    return false;
+  }
+
+  const acceptHeader = request.headers.get('accept') || '';
+  return acceptHeader.includes('text/html');
 }
 
 /**
- * @returns {{ username: string; password: string } | null}
+ * @param {URL} requestUrl
+ * @returns {boolean}
  */
-function getExpectedCredentials() {
-  const username = process.env.BASIC_AUTH_USER;
-  const password = process.env.BASIC_AUTH_PASSWORD;
-
-  if (!username || !password) {
-    return null;
-  }
-
-  return { username, password };
+function isPublicPath(requestUrl) {
+  return PUBLIC_PATHS.has(requestUrl.pathname) || requestUrl.pathname.startsWith('/icons/');
 }
 
 /**
- * @param {string | null} authorizationHeader
- * @returns {{ username: string; password: string } | null}
- */
-function parseAuthorizationHeader(authorizationHeader) {
-  if (!authorizationHeader) {
-    return null;
-  }
-
-  const [scheme, encodedCredentials] = authorizationHeader.split(' ');
-  if (scheme !== 'Basic' || !encodedCredentials) {
-    return null;
-  }
-
-  try {
-    const decodedCredentials = atob(encodedCredentials);
-    const separatorIndex = decodedCredentials.indexOf(':');
-    if (separatorIndex === -1) {
-      return null;
-    }
-
-    return {
-      username: decodedCredentials.slice(0, separatorIndex),
-      password: decodedCredentials.slice(separatorIndex + 1),
-    };
-  } catch {
-    return null;
-  }
-}
-
-/**
+ * @param {Request} request
  * @returns {Response}
  */
-function createUnauthorizedResponse() {
-  return new Response('Authentication required.', {
-    status: 401,
-    headers: UNAUTHORIZED_HEADERS,
-  });
+function createRedirectToLoginResponse(request) {
+  const currentUrl = new URL(request.url);
+  const loginUrl = new URL(LOGIN_PATH, request.url);
+  const currentPath = `${currentUrl.pathname}${currentUrl.search}`;
+
+  loginUrl.searchParams.set('returnTo', normalizeReturnTo(currentPath));
+
+  return Response.redirect(loginUrl, 307);
 }
 
 /**
@@ -83,9 +66,9 @@ function createMisconfiguredResponse() {
 
 /**
  * @param {Request} request
- * @returns {Response | undefined}
+ * @returns {Promise<Response | undefined>}
  */
-export default function middleware(request) {
+export default async function middleware(request) {
   const expectedCredentials = getExpectedCredentials();
   if (!expectedCredentials) {
     if (isLocalRequest(request.url)) {
@@ -95,17 +78,37 @@ export default function middleware(request) {
     return createMisconfiguredResponse();
   }
 
-  const providedCredentials = parseAuthorizationHeader(
-    request.headers.get('authorization'),
-  );
-  if (!providedCredentials) {
-    return createUnauthorizedResponse();
+  const requestUrl = new URL(request.url);
+  const isAuthenticated = await hasValidSession({
+    cookieHeader: request.headers.get('cookie'),
+    expectedCredentials,
+  });
+
+  if (requestUrl.pathname === LOGIN_PATH) {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    const returnTo = normalizeReturnTo(requestUrl.searchParams.get('returnTo'));
+    return Response.redirect(new URL(returnTo, request.url), 302);
   }
 
-  if (
-    providedCredentials.username !== expectedCredentials.username ||
-    providedCredentials.password !== expectedCredentials.password
-  ) {
-    return createUnauthorizedResponse();
+  if (isPublicPath(requestUrl)) {
+    return;
   }
+
+  if (isAuthenticated) {
+    return;
+  }
+
+  if (isHtmlNavigation(request)) {
+    return createRedirectToLoginResponse(request);
+  }
+
+  return new Response('Authentication required.', {
+    status: 401,
+    headers: {
+      'Cache-Control': 'no-store',
+    },
+  });
 }

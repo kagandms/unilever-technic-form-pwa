@@ -8,8 +8,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Unilever Pro">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-v2.png">
+    <link rel="manifest" href="manifest.json?v=2">
 
     <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -632,6 +633,7 @@
 
         <footer>
             <p>© 2024 Unilever</p>
+            <button id="logoutBtn" class="secondary-btn" style="margin-top: 12px;">Oturumu Kapat</button>
         </footer>
     </div>
 
@@ -709,6 +711,7 @@
         const customerSelect = document.getElementById('customerSelect');
         const saveBtn = document.getElementById('saveBtn');
         const sendBtn = document.getElementById('sendBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         const customerModal = document.getElementById('customerModal');
         const editCustomerModal = document.getElementById('editCustomerModal');
         const manageCustomersBtn = document.getElementById('manageCustomersBtn');
@@ -778,6 +781,7 @@
             customerSelect.addEventListener('change', e => { selectedCustomerId = e.target.value || null; saveState(); });
             saveBtn.addEventListener('click', handleSavePDF);
             sendBtn.addEventListener('click', handleSendWhatsApp);
+            logoutBtn.addEventListener('click', handleLogout);
 
             manageCustomersBtn.addEventListener('click', () => {
                 customerModal.style.display = 'flex';
@@ -1316,6 +1320,16 @@
             setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
             const msg = customer.name;
             setTimeout(() => { window.open('https://wa.me/' + customer.phone + '?text=' + encodeURIComponent(msg), '_blank'); }, 500);
+        }
+
+        async function handleLogout() {
+            try {
+                await fetch('/api/logout', {
+                    method: 'POST'
+                });
+            } finally {
+                window.location.href = '/login.html';
+            }
         }
 
         function showToast(msg) {
