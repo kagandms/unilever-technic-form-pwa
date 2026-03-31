@@ -2,56 +2,58 @@
     "name": "Unilever Pro",
     "short_name": "Unilever Pro",
     "description": "Unilever Servis Formu",
+    "id": "/",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#1a1a2e",
     "theme_color": "#1a1a2e",
     "orientation": "portrait",
     "icons": [
         {
-            "src": "icons/unilever-icon-72.png",
+            "src": "/icons/unilever-icon-v3-72.png?v=3",
             "sizes": "72x72",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-96.png",
+            "src": "/icons/unilever-icon-v3-96.png?v=3",
             "sizes": "96x96",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-128.png",
+            "src": "/icons/unilever-icon-v3-128.png?v=3",
             "sizes": "128x128",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-144.png",
+            "src": "/icons/unilever-icon-v3-144.png?v=3",
             "sizes": "144x144",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-152.png",
+            "src": "/icons/unilever-icon-v3-152.png?v=3",
             "sizes": "152x152",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-192.png",
+            "src": "/icons/unilever-icon-v3-192.png?v=3",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-384.png",
+            "src": "/icons/unilever-icon-v3-384.png?v=3",
             "sizes": "384x384",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icons/unilever-icon-512.png",
+            "src": "/icons/unilever-icon-v3-512.png?v=3",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"

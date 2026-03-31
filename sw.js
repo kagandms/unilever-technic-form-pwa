@@ -1,17 +1,17 @@
 // Service Worker for Servis Formu PWA (Single File Edition)
 
-const CACHE_NAME = 'servis-formu-v18-auth-session';
+const CACHE_NAME = 'servis-formu-v19-auth-session';
 const urlsToCache = [
     '/',
     '/login.html',
     '/index.html',
-    '/manifest.json?v=2',
+    '/manifest.json?v=3',
     '/logo.png',
     '/kase.jpg',
     '/unilever_logo.webp',
-    '/icons/unilever-icon-192.png',
-    '/icons/unilever-icon-512.png',
-    '/icons/apple-touch-icon-v2.png'
+    '/icons/unilever-icon-v3-192.png?v=3',
+    '/icons/unilever-icon-v3-512.png?v=3',
+    '/icons/apple-touch-icon-v3.png?v=3'
 ];
 
 self.addEventListener('install', event => {
