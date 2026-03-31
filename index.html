@@ -576,23 +576,7 @@
 </head>
 
 <body>
-    <div id="loginScreen" class="login-screen">
-        <div class="login-box">
-            <div class="login-logo">
-                <img src="unilever_logo.webp" alt="Unilever">
-            </div>
-            <h2>Servis Formu Giriş</h2>
-            <input type="password" id="loginPassword" placeholder="Şifreniz" autocomplete="current-password">
-            <div class="remember-me-container">
-                <input type="checkbox" id="rememberMe" class="remember-checkbox">
-                <label for="rememberMe" class="remember-label">Beni Hatırla</label>
-            </div>
-            <button id="loginBtn">Giriş Yap</button>
-            <p id="loginError" class="error-msg"></p>
-        </div>
-    </div>
-
-    <div class="container" id="appContainer" style="display: none;">
+    <div class="container" id="appContainer">
         <header class="logo-section">
             <div class="logo-container">
                 <img src="unilever_logo.webp" alt="Unilever" class="logo-image">
@@ -685,50 +669,6 @@
 
     <script>
         // === INLINED APP logic ===
-        const APP_PASSWORD = '__REMOVED_PASSWORD__';
-        const loginScreen = document.getElementById('loginScreen');
-        const appContainer = document.getElementById('appContainer');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginPassword = document.getElementById('loginPassword');
-        const loginError = document.getElementById('loginError');
-        const rememberMe = document.getElementById('rememberMe');
-
-        // Initial Auth Check
-        if (localStorage.getItem('dozatech_auth_permanent') === 'true' || sessionStorage.getItem('dozatech_auth') === 'true') {
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (appContainer) appContainer.style.display = 'block';
-        }
-
-        if (loginBtn) {
-            loginBtn.addEventListener('click', handleLogin);
-        }
-        if (loginPassword) {
-            loginPassword.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') handleLogin();
-            });
-        }
-
-        function handleLogin() {
-            const pwd = loginPassword.value;
-            if (pwd === APP_PASSWORD) {
-                // Sadece oturum süresince hatırla (varsayılan)
-                sessionStorage.setItem('dozatech_auth', 'true');
-
-                // Eğer beni hatırla seçiliyse kalıcı hatırla
-                if (rememberMe && rememberMe.checked) {
-                    localStorage.setItem('dozatech_auth_permanent', 'true');
-                }
-
-                loginScreen.classList.add('hidden');
-                appContainer.style.display = 'block';
-                loginError.textContent = '';
-            } else {
-                loginError.textContent = 'Yanlış şifre!';
-                loginPassword.value = '';
-                if (navigator.vibrate) navigator.vibrate(100);
-            }
-        }
-
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 

@@ -1,45 +1,5 @@
 // DozaTech Service Form Application V2.5 (Restored Standard Filenames)
 
-const APP_PASSWORD = '__REMOVED_PASSWORD__';
-const loginScreen = document.getElementById('loginScreen');
-const appContainer = document.getElementById('appContainer');
-const loginBtn = document.getElementById('loginBtn');
-const loginPassword = document.getElementById('loginPassword');
-const loginError = document.getElementById('loginError');
-const rememberMe = document.getElementById('rememberMe');
-
-// Check if already logged in
-if (localStorage.getItem('dozatech_auth_permanent') === 'true' || sessionStorage.getItem('dozatech_auth') === 'true') {
-    if (loginScreen) loginScreen.classList.add('hidden');
-    if (appContainer) appContainer.style.display = 'block';
-}
-
-if (loginBtn) {
-    loginBtn.addEventListener('click', handleLogin);
-}
-if (loginPassword) {
-    loginPassword.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleLogin();
-    });
-}
-
-function handleLogin() {
-    const pwd = loginPassword.value;
-    if (pwd === APP_PASSWORD) {
-        sessionStorage.setItem('dozatech_auth', 'true');
-        if (rememberMe && rememberMe.checked) {
-            localStorage.setItem('dozatech_auth_permanent', 'true');
-        }
-        loginScreen.classList.add('hidden');
-        appContainer.style.display = 'block';
-        loginError.textContent = '';
-    } else {
-        loginError.textContent = 'Yanlış şifre!';
-        loginPassword.value = '';
-        if (navigator.vibrate) navigator.vibrate(100);
-    }
-}
-
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 
